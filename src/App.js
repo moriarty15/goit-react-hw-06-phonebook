@@ -13,23 +13,6 @@ function App({
   filter,
   handleFilterChange,
 }) {
-  // useEffect(() => {
-  //   const contacts = JSON.parse(localStorage.getItem("contacts"));
-  //   if (contacts) {
-  //     setContacts([...contacts]);
-  //   }
-  // }, [])
-
-  // useEffect(() => {
-  //   localStorage.setItem("contacts", JSON.stringify(contacts))
-
-  // }, [contacts])
-
-  // функция получения значения из любого инпута
-  // const handleAllInputChange = (e) => {
-  //   const {value } = e.currentTarget;
-  //   setFilter(value);
-  // };
 
   // вынес фильтр в функцию
   const getVisibleContacts = () => {
@@ -61,7 +44,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     formSubmitHandler: (data) => dispatch(addContact(data)),
     deleteContact: (contactId) => dispatch(deleteContact(contactId)),
-    handleFilterChange: (e) => dispatch(handleFilterChange(e)),
+    handleFilterChange: (e) => dispatch(handleFilterChange(e.target.value)),
   };
 };
 
