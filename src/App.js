@@ -3,17 +3,13 @@ import ContactForm from "./components/ContactForm";
 import ContactList from "./components/ContactList";
 import Filter from "./components/Filter/Filter";
 import Container from "./components/Container";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { addContact, deleteContact, handleFilterChange } from "./redux/contacts/contacts-actions";
 
-function App({
-  contacts,
-  formSubmitHandler,
-  deleteContact,
-  filter,
-  handleFilterChange,
-}) {
-
+function App() {
+  const contacts = useSelector(state => state.contacts.items)
+  const filter = useSelector(state => state.contacts.filter)
+  const dispatch = useDispatch();
   // вынес фильтр в функцию
   const getVisibleContacts = () => {
     const normalizeFilter = filter.toLowerCase();
@@ -25,28 +21,13 @@ function App({
   const visibleContacts = getVisibleContacts();
   return (
     <Container>
-      <ContactForm onSubmit={formSubmitHandler} />
+      <ContactForm onSubmit={(data)=>dispatch(addContact(data))} />
       <h2>Contacts</h2>
-      <Filter filter={filter} onChange={handleFilterChange} />
-      <ContactList filter={visibleContacts} onDeleteContacts={deleteContact} />
+      <Filter filter={filter} onChange={(e)=>dispatch(handleFilterChange(e.target.value))} />
+      <ContactList filter={visibleContacts} onDeleteContacts={(contactId)=>dispatch(deleteContact(contactId))} />
     </Container>
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    contacts: state.contacts.items,
-    filter: state.contacts.filter,
-  };
-};
+export default App;
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    formSubmitHandler: (data) => dispatch(addContact(data)),
-    deleteContact: (contactId) => dispatch(deleteContact(contactId)),
-    handleFilterChange: (e) => dispatch(handleFilterChange(e.target.value)),
-  };
-};
-
-// export default App;
-export default connect(mapStateToProps, mapDispatchToProps)(App);
